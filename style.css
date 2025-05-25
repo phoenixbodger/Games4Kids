@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#game-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.words, .images {
+    width: 400px;
+    padding: 20px;
+}
+
+.word {
+    font-size: 40px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px;
+    background: lightblue;
+    margin: 5px;
+    cursor: grab;
+}
+
+.image {
+    margin: 10px;
+}
+
+#feedback {
+    font-size: 28px; /* ✅ Makes text bigger */
+    font-weight: bold; /* ✅ Makes it stand out */
+    margin-top: 15px; /* ✅ Adds space below words */
+    text-align: center;
+    color: black;
+}
+
+#next-btn {
+    font-size: 24px; /* ✅ Makes text bigger */
+    font-weight: bold; /* ✅ Makes it stand out */
+    padding: 15px 30px; /* ✅Bigger button */
+    background-color: #4CAF50; /* green background */
+}
+
+#main-btn {
+    font-size: 24px; /* ✅ Makes text bigger */
+    font-weight: bold; /* ✅ Makes it stand out */
+    padding: 15px 30px; /* ✅Bigger button */
+    background-color: #af864c; /* orange background */
+}
+
+/* If #main-btn follows a .game-button */
+#next-btn + #main-btn {
+    margin-top: 25px; /* Adjust this value for a larger gap if desired */
+}

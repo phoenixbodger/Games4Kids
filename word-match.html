@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Match Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Choose the Correct Word for the Picture!</h1>
+
+    <div id="game-container">
+        <div class="word-container">
+            <div class="words"></div> <!-- This will be filled with words dynamically -->
+            <div id="feedback"></div>
+            
+        </div>
+        <div class="images">
+            <img class="image" src="" alt="Game Image"> <!-- This will be set dynamically -->
+            <button id="next-btn">➡️ Next Round</button>
+            <button id="main-btn">🏠 Back to Main Menu</button>
+        </div>
+        
+    </div>
+    <script src="script.js"></script>
+    
+    <script>
+    // Get a reference to the button using its ID
+    const mainButton = document.getElementById('main-btn');
+
+    // Add an event listener to the button
+    mainButton.addEventListener('click', function() {
+        // When the button is clicked, change the browser's location to index.html
+        window.location.href = 'index.html';
+    });
+    </script>
+</body>
+
+</html>

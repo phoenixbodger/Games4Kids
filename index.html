@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Menu</title>
+    <style>
+        /* General Body Styling (to center content) */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* Stacks items (h1, button-menu) vertically */
+            justify-content: center; /* Centers content vertically in the viewport */
+            align-items: center; /* Centers content horizontally */
+            min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+            margin: 0; /* Remove default body margin */
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px; /* Space between the title and the button menu */
+        }
+
+        /* Styling for the container that holds your buttons */
+        .button-menu {
+            display: flex;         /* Makes this a flex container */
+            flex-direction: row;   /* Arranges direct children (buttons) in a row (default for flex, but explicit is good) */
+            gap: 20px;             /* *** THIS IS THE KEY: Adds 20px space between the buttons *** */
+            /* You can adjust the '20px' value as needed for more or less space */
+        }
+
+        /* Styling for the individual buttons (links styled as buttons) */
+        .button {
+            display: inline-block; /* Remains useful for older browser compatibility, though flex handles block-like behavior */
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none; /* Removes underline from links */
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+            /* IMPORTANT: Remove any individual 'margin' properties from .button if you had them,
+                         as 'gap' on the parent handles it more efficiently. */
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Awesome Webapp!</h1>
+
+    <div class="button-menu">
+        <a href="word-match.html" class="button">Play Word Game</a>
+        <a href="type-animal-game.html" class="button">Type the Animal Name</a>
+        <a href="future-game.html" class="button">Play Future Game (Coming Soon!)</a>
+    </div>
+
+</body>
+</html>
