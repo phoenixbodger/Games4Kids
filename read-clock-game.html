@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read the Clock</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+    <h1>What time is it?</h1>
+
+    <div class="level-selection">
+        <label for="difficulty-level">Select Level:</label>
+        <select id="difficulty-level">
+            <option value="1">Level 1: O'Clock (e.g., 3:00)</option>
+            <option value="2">Level 2: Half-Hour (e.g., 3:00, 3:30)</option>
+            <option value="3">Level 3: Quarter-Hour (e.g., 3:00, 3:15, 3:30, 3:45)</option>
+            <option value="4" selected>Level 4: Five-Minute Intervals</option>
+            <option value="5">Level 5: Every Minute</option>
+        </select>
+    </div>
+
+    <div class="clock-game-container">
+        <div class="clock-display">
+            <div class="center-dot"></div>
+            <div class="hour-hand" id="hour-hand"></div>
+            <div class="minute-hand" id="minute-hand"></div>
+            </div> <div class="time-input-group">
+            <input type="number" id="hour-input" class="time-part-input" placeholder="HH" min="1" max="12" maxlength="2">
+            <span class="time-colon">:</span>
+            <input type="number" id="minute-input" class="time-part-input" placeholder="MM" min="0" max="59" maxlength="2">
+        </div>
+        <div class="time-hint">(Use HH:MM format)</div>
+
+        <div class="controls">
+            <button id="check-time-btn" class="game-button">Check Answer</button>
+            <button id="next-time-btn" class="game-button">Next Time</button>
+        </div>
+
+        <div id="feedback-clock"></div>
+
+        <button id="main-btn">
+            <i class="fas fa-house"></i> Back to Main Menu
+        </button>
+
+    </div> <script src="script.js"></script> </body>
+</html>

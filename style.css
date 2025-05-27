@@ -1,56 +1,255 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    box-sizing: border-box;
+    min-height: 100vh; /* Make body take full viewport height */
+    display: flex; /* Use flexbox for overall page centering */
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    margin: 0; /* Remove default body margin */
+    padding: 20px; /* Add some padding around the content */
+    background-color: #e0f2f7; /* Light blue background for the page */
 }
 
-#game-container {
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Level Selection styles */
+.level-selection {
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     display: flex;
-    justify-content: center;
-    margin-top: 30px;
+    align-items: center;
+    gap: 15px;
 }
 
-.words, .images {
-    width: 400px;
-    padding: 20px;
-}
-
-.word {
-    font-size: 40px;
+.level-selection label {
+    font-size: 1.1em;
     font-weight: bold;
-    text-transform: uppercase;
-    padding: 10px;
-    background: lightblue;
-    margin: 5px;
-    cursor: grab;
+    color: #555;
 }
 
-.image {
-    margin: 10px;
+.level-selection select {
+    padding: 10px 15px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease;
 }
 
-#feedback {
-    font-size: 28px; /* ✅ Makes text bigger */
-    font-weight: bold; /* ✅ Makes it stand out */
-    margin-top: 15px; /* ✅ Adds space below words */
+.level-selection select:focus {
+    border-color: #007bff;
+}
+
+/* Updated clock-game-container styles */
+.clock-game-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally within this container */
+    gap: 25px; /* Space between clock-display, input, controls, feedback, main-btn */
+    margin-top: 20px; /* Adjust as needed */
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* More prominent shadow */
+    max-width: 550px; /* Slightly wider to accommodate elements better */
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 1; /* Ensure this container is above any body background */
+}
+
+.clock-display {
+    position: relative;
+    width: 280px; /* Slightly larger clock */
+    height: 280px;
+    border: 6px solid #333; /* Thicker border */
+    border-radius: 50%;
+    background-color: #f8f8f8; /* Lighter background */
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.25); /* More prominent inner shadow */
+    z-index: 2; /* Ensure clock is above general page elements */
+}
+
+.center-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px; /* Slightly larger center dot */
+    height: 18px;
+    background-color: #333;
+    border-radius: 50%;
+    z-index: 10; /* Ensure it's above hands */
+}
+
+.hour-hand, .minute-hand {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: bottom center;
+    background-color: #333;
+    border-radius: 5px;
+    z-index: 5; /* Hands should be above ticks but below center dot */
+}
+
+.hour-hand {
+    width: 7px; /* Slightly thicker hour hand */
+    height: 90px; /* Slightly longer hour hand */
+    /* transform is handled by JS */
+}
+
+.minute-hand {
+    width: 5px; /* Slightly thicker minute hand */
+    height: 120px; /* Slightly longer minute hand */
+    /* transform is handled by JS */
+}
+
+/* Clock Numbers and Ticks */
+.clock-number {
+    position: absolute;
+    font-size: 1.6em; /* Adjust font size */
+    font-weight: bold;
+    color: #333;
+    z-index: 3; /* Ensure numbers are above the clock face but below hands */
+}
+
+.minute-tick, .hour-tick {
+    position: absolute;
+    background-color: #333;
+    z-index: 1; /* Ticks are on the clock face, below hands and numbers */
+}
+
+.minute-tick {
+    width: 2px;
+    height: 8px; /* Length of minute tick */
+    opacity: 0.7; /* Slightly less opaque */
+}
+
+.hour-tick {
+    width: 4px;
+    height: 15px; /* Length of hour tick */
+    background-color: #555;
+}
+
+/* **** NEW INPUT STYLES **** */
+.time-input-group {
+    display: flex; /* Use flexbox to align hour, colon, and minute inputs */
+    align-items: center; /* Vertically align them */
+    gap: 5px; /* Small space between parts */
+    margin-top: -10px; /* Adjust margin as needed to bring closer to clock */
+}
+.time-input {
+    padding: 12px; /* More padding */
+    font-size: 1.3em; /* Larger font */
+    width: 180px; /* Wider input */
     text-align: center;
-    color: black;
+    border: 2px solid #ccc;
+    border-radius: 8px; /* More rounded corners */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    z-index: 3;
+    -moz-appearance: textfield; /* Hide Firefox number input arrows */
+}
+/* Hide WebKit (Chrome, Safari) number input arrows */
+.time-part-input::-webkit-outer-spin-button,
+.time-part-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.time-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+.time-colon {
+    font-size: 1.5em; /* Make colon visibly distinct */
+    font-weight: bold;
+    color: #333;
+}
+/* **** END NEW INPUT STYLES **** */
+.time-hint {
+    font-size: 1.1em;
+    color: #666; /* Slightly darker hint */
+    margin-top: -15px; /* Adjust margin to bring it closer to input */
+    z-index: 3;
 }
 
-#next-btn {
-    font-size: 24px; /* ✅ Makes text bigger */
-    font-weight: bold; /* ✅ Makes it stand out */
-    padding: 15px 30px; /* ✅Bigger button */
-    background-color: #4CAF50; /* green background */
+.controls {
+    display: flex;
+    gap: 20px; /* More space between buttons */
+    margin-top: 10px;
+    z-index: 3;
+}
+
+.game-button {
+    padding: 12px 25px; /* More padding */
+    font-size: 1.1em; /* Larger font */
+    background-color: #28a745; /* Green button */
+    color: white;
+    border: none;
+    border-radius: 8px; /* More rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.game-button:hover {
+    background-color: #218838;
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.game-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#feedback-clock {
+    margin-top: 15px;
+    font-size: 1.3em; /* Larger feedback font */
+    font-weight: bold;
+    color: #333;
+    z-index: 3;
 }
 
 #main-btn {
-    font-size: 24px; /* ✅ Makes text bigger */
-    font-weight: bold; /* ✅ Makes it stand out */
-    padding: 15px 30px; /* ✅Bigger button */
-    background-color: #af864c; /* orange background */
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #007bff; /* Blue main button */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px; /* Adjust margin as needed */
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#main-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+#main-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* If #main-btn follows a .game-button */
-#next-btn + #main-btn {
-    margin-top: 25px; /* Adjust this value for a larger gap if desired */
+/* Icon styling */
+#main-btn .fas {
+    margin-right: 5px; /* Space between icon and text */
 }
