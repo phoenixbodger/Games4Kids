@@ -5,35 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Match Game</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <h1>Choose the Correct Word for the Picture!</h1>
 
-    <div id="game-container">
-        <div class="word-container">
-            <div class="words"></div> <!-- This will be filled with words dynamically -->
-            <div id="feedback"></div>
-            
+    <div class="main-game-container word-match-container">
+        <div class="game-area">
+            <div class="image-container">
+                <img src="" alt="Animal Image" class="image">
+            </div>
+            <div class="words">
+                </div>
         </div>
-        <div class="images">
-            <img class="image" src="" alt="Game Image"> <!-- This will be set dynamically -->
-            <button id="next-btn">➡️ Next Round</button>
-            <button id="main-btn">🏠 Back to Main Menu</button>
-        </div>
-        
-    </div>
-    <script src="script.js"></script>
-    
-    <script>
-    // Get a reference to the button using its ID
-    const mainButton = document.getElementById('main-btn');
 
-    // Add an event listener to the button
-    mainButton.addEventListener('click', function() {
-        // When the button is clicked, change the browser's location to index.html
-        window.location.href = 'index.html';
-    });
-    </script>
+        <div id="feedback"></div> <div class="controls">
+            <button id="next-btn" class="game-button">Next Word</button>
+        </div>
+
+        <button id="main-btn" class="game-button">
+            <i class="fas fa-house"></i> Back to Main Menu
+        </button>
+    </div> <script src="script.js"></script>
 </body>
-
 </html>

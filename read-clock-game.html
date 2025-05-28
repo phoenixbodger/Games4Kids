@@ -11,6 +11,18 @@
 <body>
     <h1>What time is it?</h1>
 
+    <div class="mode-selection">
+        <label>Select Mode:</label>
+        <input type="radio" id="mode-multiple-choice" name="game-mode" value="multiple-choice">
+        <label for="mode-multiple-choice">Multiple Choice</label>
+
+        <input type="radio" id="mode-enter-time" name="game-mode" value="enter-time" checked>
+        <label for="mode-enter-time">Enter Time</label>
+
+        <input type="radio" id="mode-set-time" name="game-mode" value="set-time">
+        <label for="mode-set-time">Set Time</label>
+    </div>
+
     <div class="level-selection">
         <label for="difficulty-level">Select Level:</label>
         <select id="difficulty-level">
@@ -27,12 +39,25 @@
             <div class="center-dot"></div>
             <div class="hour-hand" id="hour-hand"></div>
             <div class="minute-hand" id="minute-hand"></div>
-            </div> <div class="time-input-group">
-            <input type="number" id="hour-input" class="time-part-input" placeholder="HH" min="1" max="12" maxlength="2">
-            <span class="time-colon">:</span>
-            <input type="number" id="minute-input" class="time-part-input" placeholder="MM" min="0" max="59" maxlength="2">
+            </div> <div id="mode-enter-time-content" class="mode-content">
+            <div class="time-input-group">
+                <input type="number" id="hour-input" class="time-part-input" placeholder="HH" min="1" max="12" maxlength="2">
+                <span class="time-colon">:</span>
+                <input type="number" id="minute-input" class="time-part-input" placeholder="MM" min="0" max="59" maxlength="2">
+            </div>
         </div>
-        <div class="time-hint">(Use HH:MM format)</div>
+
+        <div id="mode-multiple-choice-content" class="mode-content hidden">
+            <div class="multiple-choice-options">
+                <button class="game-button choice-button"></button>
+                <button class="game-button choice-button"></button>
+                <button class="game-button choice-button"></button>
+            </div>
+        </div>
+
+        <div id="mode-set-time-content" class="mode-content hidden">
+            <div class="set-time-instructions">Set the clock to: <span id="target-set-time-text"></span></div>
+        </div>
 
         <div class="controls">
             <button id="check-time-btn" class="game-button">Check Answer</button>
