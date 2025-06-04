@@ -4,137 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Type the Animal Name</title>
-    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* --- Specific styles for this game (can go in style.css or here) --- */
-        .game-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align items to the top if content varies in height */
-            gap: 50px; /* Space between the input/hint side and the image side */
-            width: 80%; /* Or a fixed width */
-            max-width: 900px;
-            margin-top: 50px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .left-panel {
-            flex: 1; /* Takes up available space */
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center; /* Center input/hint elements horizontally */
-        }
-
-        .right-panel {
-            flex: 1; /* Takes up available space */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .animal-image {
-            max-width: 100%; /* Ensure image scales down if too big */
-            height: auto;
-            border-radius: 8px;
-        }
-
-        .text-input {
-            padding: 10px;
-            font-size: 1.2em;
-            width: 80%; /* Adjust width as needed */
-            max-width: 300px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .game-button {
-            padding: 10px 20px;
-            font-size: 1em;
-            background-color: #4CAF50; /* Green */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .game-button:hover {
-            background-color: #45a049;
-        }
-
-        #hint-btn {
-            background-color: #FFC107; /* Yellow */
-            color: #333;
-        }
-        #hint-btn:hover {
-            background-color: #e0a800;
-        }
-
-        #message {
-            margin-top: 20px;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #333;
-        }
-
-        #hint-display {
-            margin-top: 10px;
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #6a0dad; /* Purple */
-            letter-spacing: 2px; /* Spread out letters */
-        }
-
-        /* Back to Main Menu Button styles (copied from word-game.html if different) */
-        #main-btn {
-            padding: 10px 15px;
-            font-size: 1em;
-            background-color: #007bff; /* Blue */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 30px; /* Space between game container and this button */
-        }
-        #main-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <h1>Guess the Animal!</h1>
+    <h1>Type the Animal Name!</h1>
 
-    <div class="game-container">
-        <div class="left-panel">
-            <input type="text" id="animal-input" class="text-input" placeholder="Type animal name here" autocomplete="off">
-            <div class="controls">
-                <button id="check-btn" class="game-button">Check Answer</button>
-                <button id="hint-btn" class="game-button">Hint</button>
+    <div class="main-game-container type-animal-container">
+        <div class="game-settings">
+            <div class="setting-group">
+                <label for="animal-rounds-setting">Rounds:</label>
+                <select id="animal-rounds-setting">
+                    <option value="unlimited" selected>Unlimited</option>
+                    <option value="5">5 Rounds</option>
+                    <option value="10">10 Rounds</option>
+                    <option value="25">25 Rounds</option>
+                </select>
             </div>
-            <div id="hint-display"></div>
-            <div id="message"></div>
+            <button id="start-animal-game-btn" class="game-button">Start Game</button>
         </div>
-        <div class="right-panel">
-            <img id="animal-img" src="images/dog.png" alt="Animal Image" class="animal-image">
+
+        <div class="game-info hidden" id="animal-game-info">
+            <div id="animal-round-display">Round: - / -</div>
+            <div id="animal-score-display">Score: 0</div>
+        </div>
+
+        <div class="animal-display hidden" id="animal-game-area">
+            <img id="animal-img" src="" alt="Animal Image">
+        </div>
+        <div class="input-area hidden" id="animal-input-controls">
+            <input type="text" id="animal-input" placeholder="Type the animal name" autocomplete="off">
+            <button id="check-btn" class="game-button">Check Answer</button>
+            <button id="hint-btn" class="game-button">Hint</button>
+        </div>
+        <div id="hint-display"></div>
+        <div id="message"></div>
+
+        <button id="main-btn" class="game-button">
+            <i class="fas fa-house"></i> Back to Main Menu
+        </button>
+    </div>
+
+    <div id="game-over-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Game Over!</h2>
+            <p id="final-score-text">You scored X out of Y!</p>
+            <button id="play-again-btn" class="game-button">Play Again</button>
+            <button id="back-to-menu-btn" class="game-button">Back to Main Menu</button>
         </div>
     </div>
 
-    <button id="main-btn">
-        <i class="fas fa-house"></i> Back to Main Menu
-    </button>
-
-    <script src="script.js"></script> </body>
+    <script src="script.js"></script>
+</body>
 </html>

@@ -18,7 +18,6 @@ h1 {
 }
 
 /* --- General container for game layout --- */
-/* This will control the layout of the main content area on each page */
 .main-game-container {
     background-color: #fff;
     border-radius: 12px;
@@ -40,7 +39,7 @@ h1 {
 
 .word-match-container .game-area {
     display: flex; /* Arrange image and words side-by-side */
-    flex-direction: row-reverse; /* CHANGE THIS LINE: words on left, image on right */
+    flex-direction: row-reverse; /* words on left, image on right */
     align-items: center; /* Vertically align items */
     gap: 30px; /* Space between image and words */
     width: 100%; /* Take full width of its parent */
@@ -104,28 +103,68 @@ h1 {
     min-height: 1.5em; /* Prevent layout shift when message appears/disappears */
 }
 
-/* --- Clock Game Specific Layout --- */
-.clock-game-container {
-    max-width: 550px; /* Adjust max-width for clock game */
+/* --- Type Animal Game Specific Layout --- */
+.type-animal-container {
+    max-width: 600px; /* Adjust max-width for this specific game */
+}
+
+.type-animal-container .animal-display {
+    text-align: center;
+}
+
+.type-animal-container #animal-img {
+    max-width: 250px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.type-animal-container .input-area {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 25px;
-    margin-top: 20px;
-    padding: 30px;
+    flex-direction: column; /* Stack input and buttons */
+    gap: 15px;
+    width: 100%;
+    max-width: 300px; /* Constrain input width */
+}
+
+.type-animal-container #animal-input {
+    padding: 12px 15px;
+    font-size: 1.2em;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.type-animal-container #animal-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.type-animal-container #hint-display, .type-animal-container #message {
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    min-height: 1.5em; /* Prevent layout shift */
+}
+
+/* --- Clock Game Specific Layout --- */
+/* --- Clock Game Specific Layout (read-clock-game.html) --- */
+.clock-game-container {
+    max-width: 550px;
+    margin: 0 auto;
     background-color: #fff;
+    padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-    z-index: 1;
 }
 
 .clock-display {
     position: relative;
     width: 280px;
     height: 280px;
+    margin: 0 auto;
     border: 6px solid #333;
     border-radius: 50%;
     background-color: #f8f8f8;
@@ -142,9 +181,9 @@ h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 18px;
-    height: 18px;
-    background-color: #333;
+    width: 12px; /* Correct, from demo */
+    height: 12px; /* Correct, from demo */
+    background-color: red; /* CORRECTED: This should be red, as per your demo */
     border-radius: 50%;
     z-index: 10;
 }
@@ -152,10 +191,10 @@ h1 {
 .hour-hand, .minute-hand {
     position: absolute;
     left: 50%;
-    bottom: 50%;
-    transform-origin: bottom center;
+    bottom: 50%; /* Your "perfect" setting */
+    transform-origin: bottom center; /* Your "perfect" setting */
     background-color: #333;
-    border-radius: 5px;
+    border-radius: 5px; /* From your "perfect" setting */
     z-index: 5;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -165,24 +204,23 @@ h1 {
 
 .hour-hand {
     width: 7px;
-    height: 90px;
+    height: 90px; /* Your "perfect" setting */
+    /* Ensure no margin-left, margin-top, or similar here. */
 }
 
 .minute-hand {
     width: 5px;
-    height: 120px;
+    height: 120px; /* Your "perfect" setting */
+    /* Ensure no margin-left, margin-top, or similar here. */
 }
 
-/* Clock Numbers and Ticks */
+/* Clock Numbers and Ticks - CONFIRMED CORRECT FROM DEMO'S INLINE STYLES*/
 .clock-number {
     position: absolute;
-    font-size: 1.6em;
+    font-size: 1.2em; /* From demo's inline style */
     font-weight: bold;
     color: #333;
     z-index: 3;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
@@ -190,19 +228,126 @@ h1 {
     position: absolute;
     background-color: #333;
     z-index: 1;
+    transform: translate(-50%, -50%); /* CRITICAL: This was in demo's inline style for ticks */
 }
 
 .minute-tick {
     width: 2px;
-    height: 8px;
+    height: 4px; /* From demo's inline style */
     opacity: 0.7;
 }
 
 .hour-tick {
     width: 4px;
-    height: 15px;
+    height: 8px; /* From demo's inline style */
     background-color: #555;
 }
+
+/* --- Game Settings Section Styles (Shared by Clock & Animal Games) --- */
+.game-settings {
+    display: flex;
+    flex-wrap: wrap; /* Allow settings to wrap to next line */
+    justify-content: center;
+    gap: 15px 25px; /* Row gap, column gap */
+    width: 100%;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee; /* Separator */
+    margin-bottom: 20px;
+}
+
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.setting-group label {
+    font-weight: bold;
+    color: #555;
+    font-size: 0.95em;
+}
+
+.setting-group select,
+.mode-selection { /* mode-selection specific to clock game */
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.setting-group select:hover {
+    border-color: #007bff;
+}
+
+/* Style for mode radio buttons to look like segmented buttons */
+.mode-selection {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden; /* Ensures border-radius applies to all parts */
+    border: 1px solid #007bff;
+    background-color: #fff;
+}
+
+.mode-selection input[type="radio"] {
+    display: none; /* Hide actual radio button */
+}
+
+.mode-selection label {
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: #f0f8ff; /* Light blue background for unselected */
+    color: #007bff;
+    font-weight: bold;
+    transition: background-color 0.2s, color 0.2s;
+    flex: 1; /* Distribute space evenly */
+    text-align: center;
+    border-right: 1px solid #e0f2ff; /* Separator between labels */
+}
+
+.mode-selection label:last-child {
+    border-right: none; /* No separator on last one */
+}
+
+.mode-selection input[type="radio"]:checked + label {
+    background-color: #007bff; /* Darker blue for selected */
+    color: white;
+}
+
+.mode-selection input[type="radio"]:hover + label:not(:checked) {
+    background-color: #e0f2ff; /* Lighter hover for unselected */
+}
+
+
+/* --- Game Info Display (Shared by Clock & Animal Games) --- */
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #444;
+}
+
+#timer-display { /* Specific to clock game */
+    color: #d9534f; /* Red for timer */
+}
+#round-display { /* Specific to clock game */
+    color: #5cb85c; /* Green for rounds */
+}
+
+#animal-round-display { /* Specific to animal game */
+    color: #5cb85c;
+}
+#animal-score-display { /* Specific to animal game */
+    color: #007bff; /* Blue for score */
+}
+
+
 
 /* Input and Controls for Clock Game */
 .time-input-group {
@@ -221,7 +366,7 @@ h1 {
     border-radius: 8px;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     z-index: 3;
-    -moz-appearance: textfield;
+/*    -moz-appearance: textfield; */
 }
 
 .time-part-input::-webkit-outer-spin-button,
@@ -241,6 +386,16 @@ h1 {
     font-weight: bold;
     color: #333;
 }
+
+/* Mode-specific content areas */
+.mode-content {
+    display: flex; /* Ensure these are flex for their internal layouts */
+    flex-direction: column; /* Stack contents within each mode */
+    align-items: center;
+    gap: 15px;
+    width: 100%; /* Take full width of parent container */
+}
+
 
 /* Multiple Choice specific styles for Clock Game */
 .multiple-choice-options {
@@ -327,23 +482,92 @@ h1 {
     background-color: #0056b3;
 }
 
-/* --- Utility class to hide elements (already existing) --- */
+/* --- Utility class to hide elements --- */
 .hidden {
     display: none !important;
 }
 
+/* --- NEW: Modal Styles for Game Over --- */
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    width: 80%;
+    max-width: 450px;
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.modal-content p {
+    font-size: 1.3em;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.modal-content .game-button {
+    margin: 0 10px; /* Space between buttons */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Media Queries for Responsive Design */
 @media (max-width: 768px) {
-    .mode-selection, .level-selection, .multiple-choice-options {
-        flex-direction: column;
-        gap: 10px;
+    .game-settings {
+        flex-direction: column; /* Stack settings vertically on small screens */
+        gap: 15px;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
     }
-    /* Specific for word-match-container to stack on small screens */
+    .setting-group {
+        width: 100%; /* Take full width */
+    }
+    .setting-group select,
+    .mode-selection {
+        width: 100%; /* Make selects and mode options full width */
+        max-width: 250px; /* Optional: cap max width for aesthetics */
+    }
+    .mode-selection label {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+
+    .game-info {
+        flex-direction: column; /* Stack timer and rounds vertically */
+        gap: 10px;
+        font-size: 1.1em;
+    }
+
     .word-match-container .game-area {
-        flex-direction: column;/* Keep stacking vertically on small screens */
+        flex-direction: column; /* Stack image and words vertically on small screens */
     }
     .word-match-container .words {
-        max-width: 100%; /* Allow buttons to take full width when stacked */
+        max-width: 100%; /* Allow buttons to take full width */
     }
     .choice-button, .word-match-container .word {
         font-size: 1.1em;
@@ -362,5 +586,20 @@ h1 {
     .main-game-container {
         padding: 20px; /* Reduce padding on small screens */
         gap: 20px; /* Reduce gap on small screens */
+    }
+
+    .modal-content {
+        padding: 20px;
+        width: 90%;
+    }
+    .modal-content h2 {
+        font-size: 1.6em;
+    }
+    .modal-content p {
+        font-size: 1.1em;
+    }
+    .modal-content .game-button {
+        margin: 5px; /* Adjust button spacing in modal for small screens */
+        font-size: 1em;
     }
 }
