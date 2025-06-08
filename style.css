@@ -602,4 +602,23 @@ h1 {
         margin: 5px; /* Adjust button spacing in modal for small screens */
         font-size: 1em;
     }
+
+    
+}
+/* In style.css */
+.custom-input {
+    margin-top: 8px; /* Add some space above the input */
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    width: 160px; /* Adjust as needed */
+    text-align: center;
+}
+
+.custom-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
 }

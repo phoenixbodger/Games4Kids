@@ -62,60 +62,218 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Word Matching Game (word-match.html) Specific Logic ---
-    const wordContainer = document.querySelector('.words');
-    if (wordContainer) {
-        function checkAnswer(selectedWord, correctWord) {
-            const feedbackElement = document.getElementById('feedback');
-            if (!feedbackElement) {
-                console.warn("#feedback element not found for checkAnswer.");
-                return;
-            }
-            if (selectedWord.trim().toLowerCase() === correctWord.trim().toLowerCase()) {
-                playSuccessSound();
-                feedbackElement.textContent = "✅ CORRECT!";
-                feedbackElement.style.color = "green";
-                setTimeout(async () => {
-                    feedbackElement.textContent = "";
-                    const wordContainer = document.querySelector('.words');
-                    if (wordContainer) {
-                        wordContainer.innerHTML = "";
-                    }
-                    await initWordGame();
-                }, 1500);
-            } else {
-                playIncorrectSound();
-                feedbackElement.textContent = "❌ TRY AGAIN!";
-                feedbackElement.style.color = "red";
+    const wordMatchContainer = document.querySelector('.word-match-container');
+    if (wordMatchContainer) {
+        const wordChoicesContainer = wordMatchContainer.querySelector('.words');
+        const imageElement = wordMatchContainer.querySelector('.image');
+        const feedbackElement = document.getElementById('feedback');
+
+        // Settings elements
+        const wmRoundsSetting = document.getElementById('wm-rounds-setting');
+        const wmRoundsCustomInput = document.getElementById('wm-rounds-custom');
+        const wmTimerSetting = document.getElementById('wm-timer-setting');
+        const wmTimerCustomInput = document.getElementById('wm-timer-custom');
+        const startWmGameBtn = document.getElementById('start-wm-game-btn');
+        const wmGameSettingsDiv = document.getElementById('wm-game-settings');
+
+        // Game info display elements
+        const wmGameInfo = document.getElementById('wm-game-info');
+        const wmRoundDisplay = document.getElementById('wm-round-display');
+        const wmScoreDisplay = document.getElementById('wm-score-display');
+        const wmTimerDisplay = document.getElementById('wm-timer-display');
+
+        // Active game area wrapper
+        const wmActiveGameArea = document.getElementById('wm-active-game-area');
+
+        // Game Over Modal elements
+        const wmGameOverModal = document.getElementById('wm-game-over-modal');
+        const wmFinalScoreText = document.getElementById('wm-final-score-text');
+        const wmPlayAgainBtn = document.getElementById('wm-play-again-btn');
+        const wmBackToMenuBtn = document.getElementById('wm-back-to-menu-btn');
+
+        // Game state variables
+        let wmCorrectWord = '';
+        let wmTotalRounds = '5';
+        let wmCurrentRound = 0;
+        let wmCorrectAnswers = 0;
+        let wmTimerInterval;
+        let wmTimeLeft;
+        let wmWordsList = [];
+        let wmIncorrectAttempts = 0; // New: Track incorrect attempts for Word Match
+
+        async function preloadWmWords() {
+            if (wmWordsList.length === 0) {
+                wmWordsList = await loadWords();
             }
         }
 
-        async function initWordGame() {
-            const { correctWord, wordChoices } = await setupGame();
-            const feedbackElement = document.getElementById('feedback');
-            wordContainer.innerHTML = '';
+        function startWordMatchGame() {
+            if (wmRoundsSetting.value === 'custom') {
+                const customRounds = parseInt(wmRoundsCustomInput.value);
+                wmTotalRounds = (customRounds > 0 && customRounds <= 100) ? customRounds.toString() : '5'; // Max 100 rounds
+            } else {
+                wmTotalRounds = wmRoundsSetting.value;
+            }
+
+            wmCurrentRound = 0;
+            wmCorrectAnswers = 0;
+
+            wmGameSettingsDiv.classList.add('hidden');
+            wmGameInfo.classList.remove('hidden');
+            wmActiveGameArea.classList.remove('hidden');
+            wmGameOverModal.classList.add('hidden');
+
+            updateWmScorecard();
+            loadNewWordRound();
+        }
+
+        async function loadNewWordRound() {
+            wmCurrentRound++;
+            stopWmTimer();
+            wmIncorrectAttempts = 0; // Reset incorrect attempts for the new round
+
+            if (wmCurrentRound > parseInt(wmTotalRounds)) {
+                endWordMatchGame();
+                return;
+            }
+            
+            if (wmWordsList.length === 0) {
+                await preloadWmWords();
+                if (wmWordsList.length === 0) {
+                    feedbackElement.textContent = "Error: No words loaded!";
+                    return;
+                }
+            }
+
+            wmCorrectWord = wmWordsList[Math.floor(Math.random() * wmWordsList.length)];
+            if (imageElement) {
+                imageElement.src = `images/${wmCorrectWord.toLowerCase()}.png`;
+                imageElement.alt = `Image for ${wmCorrectWord}`;
+            }
+            const incorrectWords = wmWordsList.filter(word => word !== wmCorrectWord).sort(() => Math.random() - 0.5).slice(0, 2);
+            const wordChoices = shuffleArray([wmCorrectWord, ...incorrectWords]);
+
+            wordChoicesContainer.innerHTML = '';
             wordChoices.forEach(word => {
                 const wordDiv = document.createElement('div');
                 wordDiv.classList.add('word');
                 wordDiv.textContent = word.toUpperCase();
-                wordDiv.id = word.toLowerCase();
                 wordDiv.addEventListener('click', function() {
-                    checkAnswer(wordDiv.id, correctWord);
+                    checkWmAnswer(word, wmCorrectWord);
                 });
-                wordContainer.appendChild(wordDiv);
+                
+                wordChoicesContainer.appendChild(wordDiv);
             });
-        }
-        initWordGame(); // Initial call to setup the first round
 
-        const nextButton = document.getElementById('next-btn');
-        if (nextButton) {
-            nextButton.addEventListener('click', async () => {
-                const feedbackElement = document.getElementById('feedback');
-                if (feedbackElement) feedbackElement.textContent = "";
-                await initWordGame();
-            });
-        } else {
-             console.warn("#next-btn not found on word-match.html.");
+            feedbackElement.textContent = "";
+            updateWmScorecard();
+            startWmTimer();
         }
+
+        function checkWmAnswer(selectedWord, correctWordParam) {
+            if (selectedWord.trim().toLowerCase() === correctWordParam.trim().toLowerCase()) {
+                stopWmTimer();
+                playSuccessSound();
+                feedbackElement.textContent = "✅ CORRECT!";
+                feedbackElement.style.color = "green";
+                wmCorrectAnswers++;
+                updateWmScorecard();
+                setTimeout(loadNewWordRound, 1500);
+            } else {
+                wmIncorrectAttempts++;
+                playIncorrectSound();
+                if (wmIncorrectAttempts >= 2) {
+                    feedbackElement.textContent = `❌ Incorrect. The word was "${correctWordParam}".`;
+                    feedbackElement.style.color = "red";
+                    // Score is not incremented
+                    updateWmScorecard(); // Update to show current score, even if not incremented
+                    setTimeout(loadNewWordRound, 2000); // Move to next round
+                } else {
+                    feedbackElement.textContent = "❌ TRY AGAIN! (1 attempt left)";
+                    feedbackElement.style.color = "red";
+                    // Timer continues if active
+                }
+            }
+        }
+
+        function updateWmScorecard() {
+            wmScoreDisplay.textContent = `Score: ${wmCorrectAnswers}`;
+            wmRoundDisplay.textContent = `Round: ${wmCurrentRound} / ${wmTotalRounds}`;
+        }
+
+        function endWordMatchGame() {
+            stopWmTimer();
+            wmGameOverModal.classList.remove('hidden');
+            wmActiveGameArea.classList.add('hidden');
+            wmGameInfo.classList.add('hidden');
+            feedbackElement.textContent = "";
+            wmFinalScoreText.textContent = `You scored ${wmCorrectAnswers} out of ${wmTotalRounds} correctly!`;
+        }
+
+        function startWmTimer() {
+            stopWmTimer();
+            let timerDurationValue = wmTimerSetting.value;
+            let actualDurationSeconds;
+
+            if (timerDurationValue === 'custom') {
+                const customSeconds = parseInt(wmTimerCustomInput.value);
+                actualDurationSeconds = (customSeconds > 0 && customSeconds <= 300) ? customSeconds : 0; // Max 300s
+            } else if (timerDurationValue === 'off') {
+                actualDurationSeconds = 0;
+            } else {
+                actualDurationSeconds = parseInt(timerDurationValue);
+            }
+
+            if (actualDurationSeconds <= 0) {
+                wmTimerDisplay.textContent = 'Time: Off';
+                return;
+            }
+            wmTimeLeft = actualDurationSeconds;
+            wmTimerDisplay.textContent = `Time: ${wmTimeLeft}s`;
+
+            wmTimerInterval = setInterval(() => {
+                wmTimeLeft--;
+                wmTimerDisplay.textContent = `Time: ${wmTimeLeft}s`;
+                if (wmTimeLeft <= 0) {
+                    handleWmTimeUp();
+                }
+            }, 1000);
+        }
+
+        function stopWmTimer() {
+            clearInterval(wmTimerInterval);
+            wmTimerInterval = null;
+        }
+
+        function handleWmTimeUp() {
+            stopWmTimer();
+            playIncorrectSound();
+            feedbackElement.textContent = `⏰ Time's up! The correct word was "${wmCorrectWord}".`;
+            feedbackElement.style.color = "orange";
+            setTimeout(loadNewWordRound, 2000);
+        }
+
+        // Event Listeners
+        startWmGameBtn.addEventListener('click', startWordMatchGame);
+        wmPlayAgainBtn.addEventListener('click', startWordMatchGame);
+        wmBackToMenuBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
+
+        wmRoundsSetting.addEventListener('change', function() {
+            wmRoundsCustomInput.classList.toggle('hidden', this.value !== 'custom');
+            if (this.value === 'custom') wmRoundsCustomInput.focus();
+        });
+        wmTimerSetting.addEventListener('change', function() {
+            wmTimerCustomInput.classList.toggle('hidden', this.value !== 'custom');
+            if (this.value === 'custom') wmTimerCustomInput.focus();
+        });
+
+        // Initial UI State
+        wmGameSettingsDiv.classList.remove('hidden');
+        wmGameInfo.classList.add('hidden');
+        wmActiveGameArea.classList.add('hidden');
+        wmGameOverModal.classList.add('hidden');
+
+        preloadWmWords(); // Preload words when the page/script for word-match loads               
     }
 
 
@@ -129,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // New elements for score/rounds
     const animalRoundsSetting = document.getElementById('animal-rounds-setting');
+    const animalRoundsCustomInput = document.getElementById('animal-rounds-custom'); // New
     const startAnimalGameBtn = document.getElementById('start-animal-game-btn');
     const animalGameInfo = document.getElementById('animal-game-info');
     const animalRoundDisplay = document.getElementById('animal-round-display');
@@ -136,23 +295,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const animalGameArea = document.getElementById('animal-game-area'); // .animal-display
     const animalInputControls = document.getElementById('animal-input-controls'); // .input-area
 
+    // New elements for Animal Game Timer
+    const animalTimerSetting = document.getElementById('animal-timer-setting');
+    const animalTimerCustomInput = document.getElementById('animal-timer-custom'); // New
+    const animalTimerDisplay = document.getElementById('animal-timer-display');
+
     // Game Over Modal elements
     const gameOverModal = document.getElementById('game-over-modal');
     const finalScoreText = document.getElementById('final-score-text');
     const playAgainBtn = document.getElementById('play-again-btn');
     const backToMenuBtn = document.getElementById('back-to-menu-btn');
 
+    let animalTimerInterval;
+    let animalTimeLeft;
     let animals = [];
     let currentAnimalName = '';
-    let totalAnimalRounds = 'unlimited'; // Default to unlimited
+    let totalAnimalRounds = '5'; // Default to 5
     let currentAnimalRound = 0;
     let correctAnimalAnswers = 0;
+    let animalIncorrectAttempts = 0; // New: Track incorrect attempts for Type Animal
 
     if (animalInput) { // Check if we are on the animal game page
 
         // Function to reset and start a new animal game
         function startAnimalGame() {
-            totalAnimalRounds = animalRoundsSetting.value;
+            if (animalRoundsSetting.value === 'custom') {
+                const customRounds = parseInt(animalRoundsCustomInput.value);
+                totalAnimalRounds = (customRounds > 0) ? customRounds.toString() : '5'; // Default to 5 if invalid
+            } else {
+                totalAnimalRounds = animalRoundsSetting.value;
+            }
+
+            // Timer setting will be read in startAnimalTimer
             currentAnimalRound = 0;
             correctAnimalAnswers = 0;
 
@@ -169,7 +343,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         async function loadNewAnimalRound() {
             currentAnimalRound++;
-            if (totalAnimalRounds !== 'unlimited' && currentAnimalRound > parseInt(totalAnimalRounds)) {
+            stopAnimalTimer(); // Stop any previous timer
+            animalIncorrectAttempts = 0; // Reset incorrect attempts for the new round
+            // Since 'unlimited' is removed, totalAnimalRounds will always be a numeric string.
+            // The game should end if currentAnimalRound exceeds the selected totalAnimalRounds.
+            if (currentAnimalRound > parseInt(totalAnimalRounds)) {
                 endAnimalGame();
                 return;
             }
@@ -193,12 +371,14 @@ document.addEventListener('DOMContentLoaded', function() {
             hintBtn.style.display = 'inline-block'; // Ensure hint button is visible
 
             updateAnimalScorecard();
+            startAnimalTimer(); // Start timer for the new animal
             animalInput.focus(); // Keep focus on input
         }
 
         function typeAnimalCheckAnswer() {
             const userAnswer = animalInput.value.trim().toLowerCase();
             if (userAnswer === currentAnimalName) {
+                stopAnimalTimer(); // Stop timer on correct answer
                 playSuccessSound();
                 messageDisplay.textContent = "Correct! Well done!";
                 messageDisplay.style.color = "green";
@@ -206,12 +386,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateAnimalScorecard();
                 setTimeout(loadNewAnimalRound, 1500);
             } else {
+                animalIncorrectAttempts++;
                 playIncorrectSound();
-                messageDisplay.textContent = "❌ TRY AGAIN!";
-                messageDisplay.style.color = "red";
-                // Optionally give a hint or clear input immediately for next try
+                if (animalIncorrectAttempts >= 2) {
+                    messageDisplay.textContent = `❌ Incorrect. The animal was "${currentAnimalName}".`;
+                    messageDisplay.style.color = "red";
+                    // Score is not incremented
+                    updateAnimalScorecard();
+                    setTimeout(loadNewAnimalRound, 2000); // Move to next round
+                } else {
+                    messageDisplay.textContent = "❌ TRY AGAIN! (1 attempt left)";
+                    messageDisplay.style.color = "red";
+                    // Timer continues if active and answer is wrong
+                }
             }
         }
+
 
         function showAnimalHint() {
             const hintLength = Math.ceil(currentAnimalName.length / 2);
@@ -221,14 +411,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function updateAnimalScorecard() {
             animalScoreDisplay.textContent = `Score: ${correctAnimalAnswers}`;
-            if (totalAnimalRounds === 'unlimited') {
-                animalRoundDisplay.textContent = `Round: ${currentAnimalRound} / ∞`;
-            } else {
-                animalRoundDisplay.textContent = `Round: ${currentAnimalRound} / ${totalAnimalRounds}`;
-            }
+            animalRoundDisplay.textContent = `Round: ${currentAnimalRound} / ${totalAnimalRounds}`;
         }
 
         function endAnimalGame() {
+            stopAnimalTimer();
             gameOverModal.classList.remove('hidden');
             animalGameArea.classList.add('hidden'); // Hide game elements
             animalInputControls.classList.add('hidden');
@@ -239,6 +426,50 @@ document.addEventListener('DOMContentLoaded', function() {
             finalScoreText.textContent = `You answered ${correctAnimalAnswers} out of ${totalAnimalRounds} correctly!`;
         }
 
+        // --- Animal Game Timer Functions ---
+        function startAnimalTimer() {
+            stopAnimalTimer(); // Clear any existing timer
+            let timerDurationValue = animalTimerSetting.value;
+            let actualDurationSeconds;
+
+            if (timerDurationValue === 'custom') {
+                const customSeconds = parseInt(animalTimerCustomInput.value);
+                actualDurationSeconds = (customSeconds > 0) ? customSeconds : 0; // 0 will mean 'off'
+            } else if (timerDurationValue === 'off') {
+                actualDurationSeconds = 0;
+            } else {
+                actualDurationSeconds = parseInt(timerDurationValue);
+            }
+
+            if (actualDurationSeconds <= 0) {
+                animalTimerDisplay.textContent = 'Time: Off';
+                return;
+            }
+            animalTimeLeft = actualDurationSeconds;
+            animalTimerDisplay.textContent = `Time: ${animalTimeLeft}s`;
+
+            animalTimerInterval = setInterval(() => {
+                animalTimeLeft--;
+                animalTimerDisplay.textContent = `Time: ${animalTimeLeft}s`;
+
+                if (animalTimeLeft <= 0) {
+                    handleAnimalTimeUp();
+                }
+            }, 1000);
+        }
+
+        function stopAnimalTimer() {
+            clearInterval(animalTimerInterval);
+            animalTimerInterval = null;
+        }
+
+        function handleAnimalTimeUp() {
+            stopAnimalTimer();
+            playIncorrectSound();
+            messageDisplay.textContent = `⏰ Time's up! The animal was "${currentAnimalName}".`;
+            messageDisplay.style.color = "orange";
+            setTimeout(loadNewAnimalRound, 2000); // Load next animal after a delay
+        }
 
         // Event Listeners for Type Animal Game
         startAnimalGameBtn.addEventListener('click', startAnimalGame);
@@ -254,6 +485,25 @@ document.addEventListener('DOMContentLoaded', function() {
         playAgainBtn.addEventListener('click', startAnimalGame); // Resets and starts a new game
         backToMenuBtn.addEventListener('click', function() {
             window.location.href = 'index.html';
+        });
+
+        // Event listeners for custom input visibility
+        animalRoundsSetting.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                animalRoundsCustomInput.classList.remove('hidden');
+                animalRoundsCustomInput.focus();
+            } else {
+                animalRoundsCustomInput.classList.add('hidden');
+            }
+        });
+
+        animalTimerSetting.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                animalTimerCustomInput.classList.remove('hidden');
+                animalTimerCustomInput.focus();
+            } else {
+                animalTimerCustomInput.classList.add('hidden');
+            }
         });
 
         // Initial setup for the animal game page: show settings, hide game
@@ -301,6 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const clockGameInfo = document.querySelector('.clock-game-container .game-info');
         const timerDisplay = document.getElementById('timer-display');
         const roundDisplay = document.getElementById('round-display');
+        const scoreDisplayClock = document.getElementById('score-display-clock'); // New Score Display Element
         const gameSettings = document.querySelector('.clock-game-container .game-settings');
 
 
@@ -315,6 +566,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentRoundClock = 0;
         let correctAnswersClock = 0;
         let totalQuestionsAttemptedClock = 0;
+        let clockMcIncorrectAttempts = 0; // New: Track incorrect attempts for Clock MC
+        let clockEnterTimeIncorrectAttempts = 0; // New: For Enter Time mode
+        let clockSetTimeIncorrectAttempts = 0; // New: For Set Time mode
 
 
         // Helper to hide all mode content divs
@@ -427,20 +681,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // NEW: Update Clock Scorecard Function
-        function updateClockScorecard() {
-            if (totalRoundsClock === 'unlimited') {
-                roundDisplay.textContent = `Round: ${currentRoundClock} / ∞`;
-            } else {
-                roundDisplay.textContent = `Round: ${currentRoundClock} / ${totalRoundsClock}`;
-            }
-            // You can add a score display here if you want to show it mid-game
-            // e.g., scoreDisplay.textContent = `Score: ${correctAnswersClock}`;
+        function updateClockScorecard() {        
+            roundDisplay.textContent = `Round: ${currentRoundClock} / ${totalRoundsClock}`;
+            scoreDisplayClock.textContent = `Score: ${correctAnswersClock}`; // Corrected variable name
         }
 
         // NEW: End Clock Game Function
         function endClockGame() {
             stopTimer(); // Ensure timer stops
-            feedbackClock.textContent = `Game Over! You answered ${correctAnswersClock} out of ${totalQuestionsAttemptedClock} questions correctly.`;
+            feedbackClock.textContent = `Game Over! You answered ${correctAnswersClock} out of ${totalRoundsClock} questions correctly.`;
             feedbackClock.style.color = "purple";
 
             hideAllModeContent();
@@ -594,7 +843,12 @@ document.addEventListener('DOMContentLoaded', function() {
             currentRoundClock++;
             totalQuestionsAttemptedClock++;
 
-            if (totalRoundsClock !== 'unlimited' && currentRoundClock > parseInt(totalRoundsClock)) {
+            // Reset incorrect attempts for MC mode when a new round starts
+            if (currentMode === 'multiple-choice') clockMcIncorrectAttempts = 0;
+            if (currentMode === 'enter-time') clockEnterTimeIncorrectAttempts = 0;
+            if (currentMode === 'set-time') clockSetTimeIncorrectAttempts = 0;
+
+            if (currentRoundClock > parseInt(totalRoundsClock)) {
                 endClockGame();
                 return;
             }
@@ -747,10 +1001,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const enteredMinute = parseInt(timeInputMinute.value);
 
             if (isNaN(enteredHour) || isNaN(enteredMinute) || enteredHour < 1 || enteredHour > 12 || enteredMinute < 0 || enteredMinute > 59) {
-                feedbackClock.textContent = 'Invalid time format. Use HH:MM (e.g., 3:05, 12:40).';
+                feedbackClock.textContent = 'Invalid time. Use HH:MM (e.g., 3:05, 12:40).';
                 feedbackClock.style.color = 'red';
                 playIncorrectSound();
-                startTimer(); // Restart timer if input is invalid
+                // Do not advance, allow user to correct. Timer might still be running or off.
                 return;
             }
 
@@ -761,45 +1015,52 @@ document.addEventListener('DOMContentLoaded', function() {
                 playSuccessSound();
                 feedbackClock.textContent = `✅ Correct! It's ${formattedCorrectTime}.`;
                 feedbackClock.style.color = 'green';
-                correctAnswersClock++;
+                // correctAnswersClock is incremented in checkMultipleChoiceAnswer
+                updateClockScorecard();
                 setTimeout(loadNewClockRound, 1500);
             } else {
+                clockEnterTimeIncorrectAttempts++;
                 playIncorrectSound();
-                feedbackClock.textContent = `❌ Incorrect. You entered ${formattedEnteredTime}. The correct time was ${formattedCorrectTime}.`;
-                feedbackClock.style.color = 'red';
+                if (clockEnterTimeIncorrectAttempts >= 2) {
+                    feedbackClock.textContent = `❌ Incorrect. You entered ${formattedEnteredTime}. The correct time was ${formattedCorrectTime}.`;
+                    feedbackClock.style.color = 'red';
+                    updateClockScorecard(); // Update score display even if not incremented
+                    setTimeout(loadNewClockRound, 2000); // Move to next round
+                } else {
+                    feedbackClock.textContent = `❌ TRY AGAIN! (1 attempt left)`;
+                    feedbackClock.style.color = 'red';
+                    // Allow another attempt, timer continues if active
+                    timeInputHour.focus(); // Focus on hour input for quick correction
+                }
             }
-            updateClockScorecard();
         }
 
         // Function to check answer for Multiple Choice mode
         function checkMultipleChoiceAnswer(clickedButton, chosenTime) {
             stopTimer();
-            // totalQuestionsAttemptedClock is already incremented in loadNewClockRound
-
             const formattedCorrectTime = formatTime(correctHour, correctMinute);
+            const mcChoiceButtons = document.querySelectorAll('#mode-multiple-choice-content .choice-button');
 
             if (chosenTime === formattedCorrectTime) {
                 playSuccessSound();
                 feedbackClock.textContent = `✅ Correct! It's ${formattedCorrectTime}.`;
                 feedbackClock.style.color = 'green';
-                clickedButton.classList.add('correct');
                 correctAnswersClock++;
+                updateClockScorecard();
+                setTimeout(loadNewClockRound, 2000);
             } else {
+                clockMcIncorrectAttempts++; // Corrected variable name
                 playIncorrectSound();
-                feedbackClock.textContent = `❌ Incorrect. You chose ${chosenTime}. The correct time was ${formattedCorrectTime}.`;
-                feedbackClock.style.color = 'red';
-                clickedButton.classList.add('incorrect');
-                const mcChoiceButtons = document.querySelectorAll('#mode-multiple-choice-content .choice-button'); // Re-query
-                mcChoiceButtons.forEach(button => {
-                    if (button.textContent === formattedCorrectTime) {
-                        button.classList.add('correct'); // Highlight the correct one
-                    }
-                });
+                if (clockMcIncorrectAttempts >= 2) {
+                    feedbackClock.textContent = `❌ Incorrect. The correct time was ${formattedCorrectTime}.`;
+                    feedbackClock.style.color = 'red';
+                    updateClockScorecard();
+                    setTimeout(loadNewClockRound, 2000);
+                } else {
+                    feedbackClock.textContent = `❌ Incorrect. Please try again.`;
+                    feedbackClock.style.color = 'red';
+                }
             }
-            const mcChoiceButtons = document.querySelectorAll('#mode-multiple-choice-content .choice-button'); // Re-query
-            mcChoiceButtons.forEach(button => button.disabled = true); // Disable all buttons
-            updateClockScorecard();
-            setTimeout(loadNewClockRound, 2000);
         }
 
         // Function to check answer for Set Time mode
@@ -850,13 +1111,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 feedbackClock.textContent = `✅ Correct! You set it to ${formattedSetTime}.`;
                 feedbackClock.style.color = 'green';
                 correctAnswersClock++;
+                updateClockScorecard();
+                setTimeout(loadNewClockRound, 2000);
             } else {
                 playIncorrectSound();
-                feedbackClock.textContent = `❌ Incorrect. You set it to ${formattedSetTime}. The correct time was ${formattedCorrectTime}.`;
-                feedbackClock.style.color = 'red';
+                clockSetTimeIncorrectAttempts++;
+                if (clockSetTimeIncorrectAttempts >= 2) {
+                    feedbackClock.textContent = `❌ Incorrect. You set ${formattedSetTime}. The correct time was ${formattedCorrectTime}.`;
+                    feedbackClock.style.color = 'red';
+                    updateClockScorecard(); // Update score display
+                    setTimeout(loadNewClockRound, 2000); // Move to next round
+                } else {
+                    feedbackClock.textContent = `❌ TRY AGAIN! (1 attempt left)`;
+                    feedbackClock.style.color = 'red';
+                    // Allow another attempt, timer continues if active
+                }
             }
-            updateClockScorecard();
-            setTimeout(loadNewClockRound, 2000);
         }
 
         // Event Listeners for Clock Game
@@ -866,7 +1136,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (nextTimeBtnSet) { nextTimeBtnSet.addEventListener('click', loadNewClockRound); } // Set Time mode
 
         if (timeInputHour && timeInputMinute) {
-            timeInputHour.addEventListener('input', function(event) {
+            timeInputHour.addEventListener('input', function(event) { // Corrected this line
                 let val = event.target.value.replace(/\D/g, '');
                 if (val.length === 2 && timeInputMinute) {
                     timeInputMinute.focus();
@@ -927,4 +1197,4 @@ document.addEventListener('DOMContentLoaded', function() {
     } // End of if (clockDisplay)
 
 }); // END of the single DOMContentLoaded listener
-
+                   

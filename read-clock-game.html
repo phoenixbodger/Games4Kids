@@ -39,10 +39,10 @@
             <div class="setting-group">
                 <label for="timer-setting">Timer:</label>
                 <select id="timer-setting">
-                    <option value="off">Off</option>
+                    <option value="off" selected>Off</option>
                     <option value="10">10s per round</option>
                     <option value="20">20s per round</option>
-                    <option value="30" selected>30s per round</option>
+                    <option value="30">30s per round</option>
                     <option value="45">45s per round</option>
                     <option value="60">60s per round</option>
                 </select>
@@ -51,10 +51,9 @@
             <div class="setting-group">
                 <label for="rounds-setting">Rounds:</label>
                 <select id="rounds-setting">
-                    <option value="unlimited" selected>Unlimited</option>
+                    <option value="5" selected>5 Rounds</option>
                     <option value="10">10 Rounds</option>
                     <option value="25">25 Rounds</option>
-                    <option value="50">50 Rounds</option>
                 </select>
             </div>
             
@@ -63,6 +62,7 @@
         
         <div class="game-info">
             <div id="round-display">Round: - / -</div>
+            <div id="score-display-clock">Score: 0</div> <!-- Added Score Display -->
             <div id="timer-display">Time: -s</div>
         </div>
 

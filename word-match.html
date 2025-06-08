@@ -11,21 +11,63 @@
     <h1>Choose the Correct Word for the Picture!</h1>
 
     <div class="main-game-container word-match-container">
-        <div class="game-area">
-            <div class="image-container">
-                <img src="" alt="Animal Image" class="image">
+        <div class="game-settings" id="wm-game-settings">
+            <div class="setting-group">
+                <label for="wm-rounds-setting">Rounds:</label>
+                <select id="wm-rounds-setting">
+                    <option value="5" selected>5 Rounds</option>
+                    <option value="10">10 Rounds</option>
+                    <option value="25">25 Rounds</option>
+                    <option value="custom">Custom...</option>
+                </select>
+                <input type="number" id="wm-rounds-custom" class="custom-input hidden" placeholder="Enter rounds" min="1">
             </div>
-            <div class="words">
-                </div>
+            <div class="setting-group">
+                <label for="wm-timer-setting">Timer:</label>
+                <select id="wm-timer-setting">
+                    <option value="off" selected>Off</option>
+                    <option value="10">10s</option>
+                    <option value="15">15s</option>
+                    <option value="20">20s</option>
+                    <option value="custom">Custom (seconds)...</option>
+                </select>
+                <input type="number" id="wm-timer-custom" class="custom-input hidden" placeholder="Enter seconds" min="1">
+            </div>
+            <button id="start-wm-game-btn" class="game-button">Start Game</button>
         </div>
 
-        <div id="feedback"></div> <div class="controls">
-            <button id="next-btn" class="game-button">Next Word</button>
+        <div class="game-info hidden" id="wm-game-info">
+            <div id="wm-round-display">Round: - / -</div>
+            <div id="wm-score-display">Score: 0</div>
+            <div id="wm-timer-display">Time: -s</div>
+        </div>
+
+        <div id="wm-active-game-area" class="hidden">
+            <div class="game-area">
+                <div class="image-container">
+                    <img src="" alt="Word Image" class="image">
+                </div>
+                <div class="words">
+                    <!-- Word choices will be populated here by JS -->
+                </div>
+            </div>
+            <div id="feedback"></div>
+            <!-- "Next Word" button and its .controls div removed for auto-advance -->
         </div>
 
         <button id="main-btn" class="game-button">
             <i class="fas fa-house"></i> Back to Main Menu
         </button>
-    </div> <script src="script.js"></script>
+    </div>
+
+    <div id="wm-game-over-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Game Over!</h2>
+            <p id="wm-final-score-text">You scored X out of Y!</p>
+            <button id="wm-play-again-btn" class="game-button">Play Again</button>
+            <button id="wm-back-to-menu-btn" class="game-button">Back to Main Menu</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

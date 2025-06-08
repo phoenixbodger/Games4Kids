@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,11 +15,24 @@
             <div class="setting-group">
                 <label for="animal-rounds-setting">Rounds:</label>
                 <select id="animal-rounds-setting">
-                    <option value="unlimited" selected>Unlimited</option>
-                    <option value="5">5 Rounds</option>
+                    <option value="5" selected>5 Rounds</option>
                     <option value="10">10 Rounds</option>
                     <option value="25">25 Rounds</option>
+                    <option value="custom">Custom...</option>
                 </select>
+                <input type="number" id="animal-rounds-custom" class="custom-input hidden" placeholder="Enter rounds" min="1" style="margin-top: 5px; padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 150px; text-align: center;">
+            </div>
+            <div class="setting-group">
+                <label for="animal-timer-setting">Timer:</label>
+                <select id="animal-timer-setting">
+                    <option value="off" selected>Off</option>
+                    <option value="10">10s</option>
+                    <option value="30">30s</option>
+                    <option value="45">45s</option>
+                    <option value="60">60s</option>
+                    <option value="custom">Custom (seconds)...</option>
+                </select>
+                <input type="number" id="animal-timer-custom" class="custom-input hidden" placeholder="Enter seconds" min="1" style="margin-top: 5px; padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 150px; text-align: center;">
             </div>
             <button id="start-animal-game-btn" class="game-button">Start Game</button>
         </div>
@@ -27,6 +40,7 @@
         <div class="game-info hidden" id="animal-game-info">
             <div id="animal-round-display">Round: - / -</div>
             <div id="animal-score-display">Score: 0</div>
+            <div id="animal-timer-display">Time: -s</div> <!-- New Timer Display -->
         </div>
 
         <div class="animal-display hidden" id="animal-game-area">
