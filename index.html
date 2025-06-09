@@ -3,61 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Menu</title>
+    <title>Educational Games</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* General Body Styling (to center content) */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Nunito', Arial, sans-serif; /* Changed font */
             display: flex;
-            flex-direction: column; /* Stacks items (h1, button-menu) vertically */
-            justify-content: center; /* Centers content vertically in the viewport */
+            flex-direction: column; /* Stacks items (h1, category-container) vertically */
+            justify-content: flex-start; /* Aligns content to the top */
             align-items: center; /* Centers content horizontally */
             min-height: 100vh; /* Ensures the body takes at least the full viewport height */
             margin: 0; /* Remove default body margin */
-            background-color: #f0f0f0;
+             /* Layer the image on top of the gradient */
+            background-image: url('classroom.png'), linear-gradient(to bottom right, #e0f7fa, #f0f0f0);
+            background-color: #f0f0f0; /* Fallback color if images are off */
+            background-size: cover; /* Make the entire image visible, letterboxing if necessary */
+            background-position: center center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            background-attachment: fixed; /* Keep the background fixed during scroll */
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 30px; /* Space between the title and the button menu */
+            color: #2c3e50; /* Darker, more modern color */
+            margin-top: 30px; /* Add some space from the top */
+            margin-bottom: 50px; /* Increased space for the larger script font */
+            font-family: 'Dancing Script', cursive; /* Apply script font */
+            font-size: 3.8em; /* Script fonts often need to be larger to be legible */
+            font-weight: 700;
+            /* Banner effect for standing out */
+            background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
+            padding: 15px 30px; /* Padding around the text */
+            border-radius: 12px; /* Rounded corners for the banner */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Shadow for the banner itself */
+            display: inline-block; /* Makes the background fit the text content */
+            text-shadow: none; /* Remove previous text-shadow if banner provides enough contrast */
         }
 
-        /* Styling for the container that holds your buttons */
-        .button-menu {
-            display: flex;         /* Makes this a flex container */
-            flex-direction: row;   /* Arranges direct children (buttons) in a row (default for flex, but explicit is good) */
-            gap: 20px;             /* *** THIS IS THE KEY: Adds 20px space between the buttons *** */
-            /* You can adjust the '20px' value as needed for more or less space */
+
+        /* Styling for the container that holds all categories */
+        .category-container {
+            display: flex;
+            flex-direction: column; /* Stack categories vertically */
+            align-items: center; /* Center categories horizontally */
+            gap: 30px; /* Space between category blocks */
+            width: 90%; /* Slightly wider */
+            max-width: 1000px; /* Max width for the category container */
+        }
+
+        .category-card {
+            background-color: #fff;
+            border: none; /* Remove border, rely on shadow */
+            border-radius: 12px; /* More rounded corners */
+            padding: 25px; /* Increased padding */
+            width: 100%; /* Category cards take full width of their container */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Softer, more pronounced shadow */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Hover effect */
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px); /* Slight lift on hover */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .category-card h2 {
+            margin-top: 0;
+            font-family: 'Dancing Script', cursive; /* Apply script font to category titles */
+            font-size: 2.2em; /* Adjust size for script font */
+            color: #3498db; /* A friendly blue */
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px; /* More space below category title */
+        }
+
+        .game-list {
+            display: flex;
+            flex-direction: column; /* Stack game buttons vertically */
+            gap: 10px; /* Space between game buttons within a category */
         }
 
         /* Styling for the individual buttons (links styled as buttons) */
         .button {
-            display: inline-block; /* Remains useful for older browser compatibility, though flex handles block-like behavior */
+            display: block; /* Make buttons take full width of their .game-list container */
             padding: 15px 30px;
-            font-size: 1.2em;
+            font-size: 1.1em; /* Slightly adjusted font size */
             color: white;
-            background-color: #007bff;
+            background-color: #5dade2; /* Lighter, friendlier blue */
             border: none;
-            border-radius: 5px;
+            border-radius: 8px; /* More rounded buttons */
             text-decoration: none; /* Removes underline from links */
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth hover effect */
-            /* IMPORTANT: Remove any individual 'margin' properties from .button if you had them,
-                         as 'gap' on the parent handles it more efficiently. */
+            text-align: center;
+            font-family: 'Nunito', sans-serif; /* Ensure buttons use Nunito for clarity */
+            font-weight: 700; 
+            transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth hover effect */
         }
 
         .button:hover {
-            background-color: #0056b3;
+            background-color: #3498db; /* Darker shade on hover */
+            transform: scale(1.02); /* Slight zoom on hover */
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .category-container {
+                flex-direction: row; /* Categories side-by-side on larger screens */
+                align-items: flex-start; /* Align cards to the top */
+                justify-content: center;
+            }
+            .category-card {
+                width: calc(33.333% - 22px); /* Adjusted for gap and potential borders/padding */
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to My Awesome Webapp!</h1>
+    <h1>Educational Games</h1>
+   
+    <div class="category-container">
+        <div class="category-card" id="reading-games">
+            <h2>Reading</h2>
+            <div class="game-list">
+                <a href="word-match.html" class="button">Match Words to Images</a>
+                <a href="type-animal-game.html" class="button">Type the Animal Name</a>
+            </div>
+        </div>
 
-    <div class="button-menu">
-        <a href="word-match.html" class="button">Play Word Game</a>
-        <a href="type-animal-game.html" class="button">Type the Animal Name</a>
-        <a href="read-clock-game.html" class="button">Read the Clock</a>
+        <div class="category-card" id="time-games">
+            <h2>Time</h2>
+            <div class="game-list">
+                <a href="read-clock-game.html" class="button">Clock Game</a>
+            </div>
+        </div>
+
+        <div class="category-card" id="math-games">
+            <h2>Math</h2>
+            <div class="game-list">
+                <!-- Math games will go here -->
+                <p style="text-align: center; color: #777;">More games coming soon!</p>
+            </div>
+        </div>
     </div>
 
 </body>

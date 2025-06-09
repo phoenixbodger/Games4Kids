@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Read the Clock Game</title>
+    <title>Clock Game</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <h1>Read the Clock Game</h1>
+     <h1 class="game-title-banner">Clock Game</h1>
 
     <div class="main-game-container clock-game-container">
 
@@ -16,10 +16,10 @@
             <div class="setting-group">
                 <label for="difficulty-level">Difficulty:</label>
                 <select id="difficulty-level">
-                    <option value="1">Level 1 (O'Clock)</option>
+                    <option value="1" selected>Level 1 (O'Clock)</option>
                     <option value="2">Level 2 (Half-Hour)</option>
                     <option value="3">Level 3 (Quarter-Hour)</option>
-                    <option value="4" selected>Level 4 (5-Minute)</option>
+                    <option value="4">Level 4 (5-Minute)</option>
                     <option value="5">Level 5 (Every Minute)</option>
                 </select>
             </div>
@@ -41,24 +41,28 @@
                 <select id="timer-setting">
                     <option value="off" selected>Off</option>
                     <option value="10">10s per round</option>
-                    <option value="20">20s per round</option>
                     <option value="30">30s per round</option>
-                    <option value="45">45s per round</option>
                     <option value="60">60s per round</option>
+                    <option value="custom">Custom (seconds)...</option>
                 </select>
+                <input type="number" id="clock-timer-custom" class="custom-input hidden" placeholder="Enter seconds" min="1">
             </div>
 
             <div class="setting-group">
                 <label for="rounds-setting">Rounds:</label>
                 <select id="rounds-setting">
+                    <!-- Note: The "Custom..." option for rounds was missing here if intended -->
+                    <!-- For now, assuming predefined rounds are sufficient as per original structure -->
                     <option value="5" selected>5 Rounds</option>
                     <option value="10">10 Rounds</option>
                     <option value="25">25 Rounds</option>
+                    <option value="custom">Custom ...</option>
                 </select>
+                <input type="number" id="clock-rounds-custom" class="custom-input hidden" placeholder="Enter rounds" min="1" style="margin-top: 5px; padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 150px; text-align: center;">
             </div>
             
             <button id="start-game-btn" class="game-button">Start Game</button>
-        </div>
+        </div> <!-- End of game-settings -->
         
         <div class="game-info">
             <div id="round-display">Round: - / -</div>
@@ -109,6 +113,7 @@
 
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- Common utilities and other game logic -->
+    <script src="read-clock-game.js"></script> <!-- Type Animal Game specific logic -->
 </body>
 </html>

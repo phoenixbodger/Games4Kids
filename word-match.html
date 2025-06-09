@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <h1>Choose the Correct Word for the Picture!</h1>
+    <h1 class="game-title-banner">Choose the Correct Word for the Picture!</h1>
+
+    <div class="main-game-container word-match-container">
+        <div class="game-settings" id="wm-game-settings">
 
     <div class="main-game-container word-match-container">
         <div class="game-settings" id="wm-game-settings">
@@ -27,8 +30,8 @@
                 <select id="wm-timer-setting">
                     <option value="off" selected>Off</option>
                     <option value="10">10s</option>
-                    <option value="15">15s</option>
-                    <option value="20">20s</option>
+                    <option value="30">15s</option>
+                    <option value="60">20s</option>
                     <option value="custom">Custom (seconds)...</option>
                 </select>
                 <input type="number" id="wm-timer-custom" class="custom-input hidden" placeholder="Enter seconds" min="1">
@@ -68,6 +71,7 @@
             <button id="wm-back-to-menu-btn" class="game-button">Back to Main Menu</button>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- Common utilities and other game logic -->
+    <script src="word-match-game.js"></script> <!-- Word Match Game specific logic -->
 </body>
 </html>
