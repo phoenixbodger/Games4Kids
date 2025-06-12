@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const checkTimeBtnEnter = document.getElementById('check-time-btn');
         const nextTimeBtnEnter = document.getElementById('next-time-btn');
+        const nextTimeBtnMc = document.getElementById('next-time-btn-mc'); // New MC Next Button
 
         const checkTimeBtnSet = document.getElementById('check-time-btn-set');
         const nextTimeBtnSet = document.getElementById('next-time-btn-set');
@@ -37,6 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const scoreDisplayClock = document.getElementById('score-display-clock'); 
         const gameSettings = document.querySelector('.clock-game-container .game-settings');
 
+        // Modal elements for Clock Game
+        const clockGameOverModal = document.getElementById('clock-game-over-modal');
+        const clockFinalScoreText = document.getElementById('clock-final-score-text');
+        const clockPlayAgainBtn = document.getElementById('clock-play-again-btn');
+        const clockBackToMenuBtn = document.getElementById('clock-back-to-menu-btn');
+
         let currentDifficulty = parseInt(difficultyLevelSelect.value);
         let correctHour, correctMinute;
         let currentMode = document.querySelector('input[name="game-mode"]:checked').value;
@@ -51,51 +58,55 @@ document.addEventListener('DOMContentLoaded', function() {
         let clockEnterTimeIncorrectAttempts = 0; 
         let clockSetTimeIncorrectAttempts = 0; 
 
+        let clockElementsDrawn = false; // Flag to ensure clock numbers/ticks are drawn only once
+
         function hideAllModeContent() {
-            if (modeContents['multiple-choice']) modeContents['multiple-choice'].classList.add('hidden');
-            if (modeContents['enter-time']) modeContents['enter-time'].classList.add('hidden');
-            if (modeContents['set-time']) modeContents['set-time'].classList.add('hidden');
+            // Hide main content divs for each mode
+            if (modeContents['multiple-choice']) {
+                modeContents['multiple-choice'].classList.add('hidden');
+            }
+            if (modeContents['enter-time']) {
+                modeContents['enter-time'].classList.add('hidden');
+                // Also explicitly hide specific controls within Enter Time mode
+                const etContent = modeContents['enter-time'];
+                const inputGroup = etContent.querySelector('.time-input-group');
+                const controls = etContent.querySelector('.controls');
+                if (inputGroup) inputGroup.classList.add('hidden');
+                if (controls) controls.classList.add('hidden');
+            }
+            if (modeContents['set-time']) {
+                modeContents['set-time'].classList.add('hidden');
+                // Also explicitly hide specific controls within Set Time mode
+                const stContent = modeContents['set-time'];
+                const controls = stContent.querySelector('.controls');
+                if (controls) controls.classList.add('hidden');
+            }
         }
 
-        function switchMode(mode) {
-            hideAllModeContent(); 
-            if (modeContents[mode]) modeContents[mode].classList.remove('hidden'); 
-
-            if (mode === 'multiple-choice') {
-                if (document.querySelector('#mode-enter-time-content')) { 
-                    const inputGroup = document.querySelector('#mode-enter-time-content .time-input-group');
-                    const controls = document.querySelector('#mode-enter-time-content .controls');
-                    if (inputGroup) inputGroup.classList.add('hidden');
-                    if (controls) controls.classList.add('hidden');
-                }
-                if (document.querySelector('#mode-set-time-content')) { 
-                    const controls = document.querySelector('#mode-set-time-content .controls');
-                    if (controls) controls.classList.add('hidden');
-                }
-            } else if (mode === 'enter-time') {
-                if (document.querySelector('#mode-enter-time-content')) {
-                    const inputGroup = document.querySelector('#mode-enter-time-content .time-input-group');
-                    const controls = document.querySelector('#mode-enter-time-content .controls');
+        // New function to set up UI for the active game mode when game starts
+        function prepareGameInterfaceForMode(mode) {
+            hideAllModeContent(); // Hide all main mode content divs first
+            if (modeContents[mode]) {
+                modeContents[mode].classList.remove('hidden'); // Show the selected mode's main content div
+            }
+            // Now, show the specific interactive controls for THIS mode
+            if (mode === 'enter-time') {
+                const enterTimeContent = modeContents['enter-time'];
+                if (enterTimeContent) {
+                    const inputGroup = enterTimeContent.querySelector('.time-input-group');
+                    const controls = enterTimeContent.querySelector('.controls');
                     if (inputGroup) inputGroup.classList.remove('hidden');
                     if (controls) controls.classList.remove('hidden');
                 }
-                if (document.querySelector('#mode-set-time-content')) {
-                    const controls = document.querySelector('#mode-set-time-content .controls');
-                    if (controls) controls.classList.add('hidden');
-                }
             } else if (mode === 'set-time') {
-                if (document.querySelector('#mode-enter-time-content')) {
-                    const inputGroup = document.querySelector('#mode-enter-time-content .time-input-group');
-                    const controls = document.querySelector('#mode-enter-time-content .controls');
-                    if (inputGroup) inputGroup.classList.add('hidden');
-                    if (controls) controls.classList.add('hidden');
-                }
-                if (document.querySelector('#mode-set-time-content')) {
-                    const controls = document.querySelector('#mode-set-time-content .controls');
+                const setTimeContent = modeContents['set-time'];
+                if (setTimeContent) {
+                    const controls = setTimeContent.querySelector('.controls');
                     if (controls) controls.classList.remove('hidden');
                 }
             }
-            loadNewClockRound();
+            // For multiple-choice, its buttons are populated by loadNewClockRound,
+            // so no specific controls need to be unhidden here beyond the main modeContents['multiple-choice'] div.
         }
 
         function startClockGame() {
@@ -112,11 +123,18 @@ document.addEventListener('DOMContentLoaded', function() {
             correctAnswersClock = 0; 
             totalQuestionsAttemptedClock = 0; 
 
+            if (clockGameOverModal) clockGameOverModal.classList.add('hidden'); // Hide modal if visible
             gameSettings.classList.add('hidden'); 
             clockGameInfo.classList.remove('hidden'); 
-            clockDisplay.classList.remove('hidden'); 
+            if(clockDisplay) clockDisplay.classList.remove('hidden'); // Ensure clock display is visible
 
-            switchMode(currentMode); 
+            if (!clockElementsDrawn && clockDisplay) { 
+                drawClockNumbersAndTicks();
+                clockElementsDrawn = true;
+            }
+
+            prepareGameInterfaceForMode(currentMode); // Setup the UI for the selected mode
+            loadNewClockRound(); // Load the first round data and populate UI (like MC buttons)
             updateClockScorecard(); 
         }
 
@@ -165,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
             feedbackClock.style.color = "orange";
             playIncorrectSound(); // Assumes playIncorrectSound is global (from script.js)
             updateClockScorecard();
+            if (nextTimeBtnMc && currentMode === 'multiple-choice') nextTimeBtnMc.disabled = true; // Disable on time up
             setTimeout(loadNewClockRound, 2000);
         }
 
@@ -175,17 +194,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function endClockGame() {
             stopTimer(); 
-            feedbackClock.textContent = `Game Over! You answered ${correctAnswersClock} out of ${totalRoundsClock} questions correctly.`;
-            feedbackClock.style.color = "purple";
 
+            if (clockFinalScoreText) {
+                clockFinalScoreText.textContent = `You answered ${correctAnswersClock} out of ${totalRoundsClock} questions correctly!`;
+            }
+            if (clockGameOverModal) clockGameOverModal.classList.remove('hidden');
+
+            
             hideAllModeContent();
-            if (document.querySelector('#mode-enter-time-content .time-input-group')) document.querySelector('#mode-enter-time-content .time-input-group').classList.add('hidden');
-            if (document.querySelector('#mode-enter-time-content .controls')) document.querySelector('#mode-enter-time-content .controls').classList.add('hidden');
-            if (document.querySelector('#mode-set-time-content .controls')) document.querySelector('#mode-set-time-content .controls').classList.add('hidden');
-
+            
             clockGameInfo.classList.add('hidden');
-            gameSettings.classList.remove('hidden');
-            startGameBtn.textContent = 'Play Again';
+            // gameSettings are not shown here, the modal is.
+            if (clockDisplay) clockDisplay.classList.add('hidden'); // Ensure clock is hidden when game ends
+            if (feedbackClock) feedbackClock.textContent = ''; // Clear any active game feedback
         }
 
         function generateRandomTime(difficulty) {
@@ -308,6 +329,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.classList.remove('correct', 'incorrect');
                 button.disabled = false;
             });
+            if (nextTimeBtnMc && currentMode === 'multiple-choice') { // Enable MC Next button
+                nextTimeBtnMc.disabled = false;
+            }
 
             const time = generateRandomTime(currentDifficulty);
             correctHour = time.hour;
@@ -461,6 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 correctAnswersClock++;
                 updateClockScorecard();
                 mcChoiceButtons.forEach(button => button.disabled = true); 
+                if (nextTimeBtnMc) nextTimeBtnMc.disabled = true; // Disable MC Next button
                 setTimeout(loadNewClockRound, 2000);
             } else {
                 clockMcIncorrectAttempts++; 
@@ -474,6 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (button.textContent === formattedCorrectTime) button.classList.add('correct'); 
                         button.disabled = true; 
                     });
+                    if (nextTimeBtnMc) nextTimeBtnMc.disabled = true; // Disable MC Next button
                     updateClockScorecard();
                     setTimeout(loadNewClockRound, 2000);
                 } else {
@@ -534,6 +560,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (nextTimeBtnEnter) nextTimeBtnEnter.addEventListener('click', loadNewClockRound); 
         if (checkTimeBtnSet) checkTimeBtnSet.addEventListener('click', checkSetTimeAnswer); 
         if (nextTimeBtnSet) nextTimeBtnSet.addEventListener('click', loadNewClockRound); 
+        if (nextTimeBtnMc) { // Event listener for the new MC Next button
+            nextTimeBtnMc.addEventListener('click', function() {
+                loadNewClockRound(); // Simply load the next round
+            });
+        }
 
         if (timeInputHour && timeInputMinute) {
             timeInputHour.addEventListener('input', function(event) { 
@@ -551,14 +582,20 @@ document.addEventListener('DOMContentLoaded', function() {
         modeRadioButtons.forEach(radio => {
             radio.addEventListener('change', function() {
                 currentMode = this.value;
-                switchMode(currentMode);
-            });
+                // Only proceed if we are in the settings view
+                if (modeContents[currentMode] && gameSettings && !gameSettings.classList.contains('hidden')) {
+                    // No UI changes here, just update the mode.
+                }
+            })
         });
 
         if (difficultyLevelSelect) {
             difficultyLevelSelect.addEventListener('change', function() {
                 currentDifficulty = parseInt(this.value);
-                loadNewClockRound();
+                // Only load a new round if a game is actually active (i.e., settings are hidden)
+                if (gameSettings && gameSettings.classList.contains('hidden')) {
+                    loadNewClockRound();
+                }
             });
         }
 
@@ -577,6 +614,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         startGameBtn.addEventListener('click', startClockGame);
 
+        // Event listeners for the new modal buttons
+        if (clockPlayAgainBtn) {
+            clockPlayAgainBtn.addEventListener('click', function() {
+                if (clockGameOverModal) clockGameOverModal.classList.add('hidden');
+                startClockGame(); 
+            });
+        }
+        if (clockBackToMenuBtn) {
+            clockBackToMenuBtn.addEventListener('click', function() {
+                window.location.href = 'read-clock-game.html';
+            });
+        }
+
         if (mainButton) { 
             mainButton.addEventListener('click', function() { 
                 const isSettingsVisible = gameSettings && !gameSettings.classList.contains('hidden');
@@ -590,6 +640,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     clockDisplay.classList.add('hidden'); 
                     if (feedbackClock) feedbackClock.textContent = '';
                     if (document.querySelector('#mode-enter-time-content .time-input-group')) document.querySelector('#mode-enter-time-content .time-input-group').classList.add('hidden');
+                    if (clockGameOverModal) clockGameOverModal.classList.add('hidden'); // Hide modal if returning to settings
                     if (document.querySelector('#mode-enter-time-content .controls')) document.querySelector('#mode-enter-time-content .controls').classList.add('hidden');
                     if (document.querySelector('#mode-set-time-content .controls')) document.querySelector('#mode-set-time-content .controls').classList.add('hidden');
                 }
@@ -598,11 +649,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         gameSettings.classList.remove('hidden');
         clockGameInfo.classList.add('hidden');
-        hideAllModeContent();
-        if (document.querySelector('#mode-enter-time-content .time-input-group')) document.querySelector('#mode-enter-time-content .time-input-group').classList.add('hidden');
-        if (document.querySelector('#mode-enter-time-content .controls')) document.querySelector('#mode-enter-time-content .controls').classList.add('hidden');
-        if (document.querySelector('#mode-set-time-content .controls')) document.querySelector('#mode-set-time-content .controls').classList.add('hidden');
-
-        drawClockNumbersAndTicks(); 
+        if (clockDisplay) clockDisplay.classList.add('hidden'); // Hide clock when settings are initially shown
+        hideAllModeContent(); // This should be sufficient to hide all mode content and their inner controls.
+        // drawClockNumbersAndTicks(); // Moved to startClockGame to ensure clock is visible 
     } 
 });

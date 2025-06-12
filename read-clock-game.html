@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body>
+    <body class="clock-game-background">
      <h1 class="game-title-banner">Clock Game</h1>
 
     <div class="main-game-container clock-game-container">
@@ -76,13 +76,15 @@
             <div id="minute-hand" class="minute-hand"></div>
             </div>
 
-        <div id="mode-multiple-choice-content" class="mode-content">
+        <div id="mode-multiple-choice-content" class="mode-content hidden">
             <div class="multiple-choice-options">
                 <button class="choice-button game-button"></button>
                 <button class="choice-button game-button"></button>
                 <button class="choice-button game-button"></button>
             </div>
+            <button id="next-time-btn-mc" class="game-button" style="margin-top: 10px;">Next Time</button> <!-- New Button -->
         </div>
+        
 
         <div id="mode-enter-time-content" class="mode-content hidden">
             <div class="time-input-group">
@@ -111,6 +113,15 @@
             <i class="fas fa-house"></i> Back to Main Menu
         </button>
 
+    </div>
+    <!-- Game Over Modal for Clock Game -->
+    <div id="clock-game-over-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Game Over!</h2>
+            <p id="clock-final-score-text">You scored X out of Y!</p>
+            <button id="clock-play-again-btn" class="game-button">Play Again</button>
+            <button id="clock-back-to-menu-btn" class="game-button">Back to Main Menu</button>
+        </div>
     </div>
 
     <script src="script.js"></script> <!-- Common utilities and other game logic -->
