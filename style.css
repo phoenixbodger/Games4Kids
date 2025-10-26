@@ -65,6 +65,11 @@ body {
     background-color: #0056b3;
 }
 
+.hint-button {
+    background-color: #f0ad4e; /* A nice orange for hints */
+}
+.hint-button:hover { background-color: #ec971f; }
+
 /* Minimal modal styling (can be expanded) */
 .modal {
     position: fixed;
@@ -225,6 +230,57 @@ body {
     font-weight: bold;
     min-height: 1.5em; /* Prevent layout shift */
 }
+
+/* --- Math Addition Game Specific Layout --- */
+.math-addition-container {
+    max-width: 600px;
+    text-align: center; /* Center content inside the math game container */
+}
+
+.math-problem-area {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+#math-answer-input {
+    padding: 12px 15px;
+    font-size: 1.5em;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    width: 150px;
+}
+
+#math-feedback {
+    margin-top: 15px;
+    font-size: 1.3em;
+    font-weight: bold;
+    min-height: 1.5em;
+}
+
+/* Styles for the hint container and circles */
+.math-hint-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px auto;
+    padding: 10px;
+    min-height: 50px; /* Reserve some space */
+    max-width: 90%;
+}
+
+.count-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: inset 0 -3px 5px rgba(0,0,0,0.2);
+}
+
+.red-circle { background-color: #e74c3c; }
+.blue-circle { background-color: #3498db; }
 
 /* Clock Game Specific Styles */
 .clock-game-container .game-info { /* Styles for the round/score/timer display */
