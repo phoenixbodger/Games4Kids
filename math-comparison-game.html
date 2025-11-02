@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Game - Comparison</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-game-container math-comparison-container">
+        <h1>Greater Than, Less Than, or Equal To</h1>
+
+        <!-- Settings Section -->
+        <div id="comparison-game-settings" class="game-settings">
+            <div class="setting-group">
+                <label for="comparison-rounds-setting">Rounds:</label>
+                <select id="comparison-rounds-setting">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <input type="number" id="comparison-rounds-custom" class="custom-input hidden" placeholder="1-100" min="1" max="100">
+            </div>
+            <button id="start-comparison-game-btn" class="game-button">Start Game</button>
+        </div>
+
+        <!-- Game Info Header -->
+        <div id="comparison-game-info" class="game-info hidden">
+            <span id="comparison-score-display">Score: 0</span>
+            <span id="comparison-round-display">Round: 0 / 10</span>
+        </div>
+
+        <!-- Active Game Area -->
+        <div id="comparison-active-game-area" class="hidden">
+            <div class="comparison-problem-area">
+                <span id="comparison-num1" class="comparison-number">5</span>
+                <span class="comparison-placeholder">?</span>
+                <span id="comparison-num2" class="comparison-number">3</span>
+            </div>
+            <div class="comparison-choices">
+                <button class="game-button choice-button" data-choice=">">&gt;</button>
+                <button class="game-button choice-button" data-choice="<">&lt;</button>
+                <button class="game-button choice-button" data-choice="=">=</button>
+            </div>
+            <div id="comparison-feedback" class="feedback"></div>
+        </div>
+
+        <button id="main-btn" class="game-button">Back to Main Menu</button>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="comparison-game-over-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Game Over!</h2>
+            <p id="comparison-final-score-text">You scored 0 out of 10 correctly!</p>
+            <div class="modal-buttons">
+                <button id="comparison-play-again-btn" class="game-button">Play Again</button>
+                <button id="comparison-back-to-menu-btn" class="game-button">Main Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="math-comparison-game.js"></script>
+</body>
+</html>

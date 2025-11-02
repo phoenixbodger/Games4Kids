@@ -282,6 +282,34 @@ body {
 .red-circle { background-color: #e74c3c; }
 .blue-circle { background-color: #3498db; }
 
+/* --- Math Comparison Game Specific Layout --- */
+.math-comparison-container {
+    max-width: 600px;
+    text-align: center;
+}
+
+.comparison-problem-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-size: 3em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 25px;
+}
+
+.comparison-choices {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.comparison-choices .choice-button {
+    font-size: 2em;
+    width: 80px;
+}
 /* Clock Game Specific Styles */
 .clock-game-container .game-info { /* Styles for the round/score/timer display */
     display: flex;
