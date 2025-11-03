@@ -282,6 +282,23 @@ body {
 .red-circle { background-color: #e74c3c; }
 .blue-circle { background-color: #3498db; }
 
+/* Style for crossed-out circles in subtraction hint */
+.count-circle.crossed-out {
+    position: relative;
+    opacity: 0.5;
+}
+
+.count-circle.crossed-out::after {
+    content: '';
+    position: absolute;
+    left: -10%;
+    top: 50%;
+    width: 120%;
+    height: 4px;
+    background-color: #2c3e50;
+    transform: rotate(-45deg);
+}
+
 /* --- Math Comparison Game Specific Layout --- */
 .math-comparison-container {
     max-width: 600px;

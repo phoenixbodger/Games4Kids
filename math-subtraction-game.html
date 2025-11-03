@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Game - Subtraction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-game-container math-subtraction-container">
+        <h1>Simple Subtraction</h1>
+
+        <!-- Settings Section -->
+        <div id="subtraction-game-settings" class="game-settings">
+            <div class="setting-group">
+                <label for="subtraction-rounds-setting">Rounds:</label>
+                <select id="subtraction-rounds-setting">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <input type="number" id="subtraction-rounds-custom" class="custom-input hidden" placeholder="1-100" min="1" max="100">
+            </div>
+            <button id="start-subtraction-game-btn" class="game-button">Start Game</button>
+        </div>
+
+        <!-- Game Info Header -->
+        <div id="subtraction-game-info" class="game-info hidden">
+            <span id="subtraction-score-display">Score: 0</span>
+            <span id="subtraction-round-display">Round: 0 / 10</span>
+        </div>
+
+        <!-- Active Game Area -->
+        <div id="subtraction-active-game-area" class="hidden">
+            <div class="math-problem-area">
+                <span id="subtraction-problem-display">10 - 4 = ?</span>
+            </div>
+
+            <div id="subtraction-hint-display" class="math-hint-container">
+                <!-- Circles will be added here by JS -->
+            </div>
+
+            <div class="input-area">
+                <input type="number" id="subtraction-answer-input" placeholder="Your Answer">
+                <button id="check-subtraction-btn" class="game-button">Check</button>
+                <button id="subtraction-hint-btn" class="game-button hint-button">Hint</button>
+            </div>
+            <div id="subtraction-feedback" class="feedback"></div>
+        </div>
+
+        <button id="main-btn" class="game-button">Back to Main Menu</button>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="subtraction-game-over-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Game Over!</h2>
+            <p id="subtraction-final-score-text">You scored 0 out of 10 correctly!</p>
+            <div class="modal-buttons">
+                <button id="subtraction-play-again-btn" class="game-button">Play Again</button>
+                <button id="subtraction-back-to-menu-btn" class="game-button">Main Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="math-subtraction-game.js"></script>
+</body>
+</html>
