@@ -22,6 +22,13 @@
       "title": "Pizza Recipe",
       "blanks": ["Adjective", "Nationality", "Person", "Noun", "Adjective", "Noun", "Adjective", "Adjective", "Plural Noun", "Noun", "Number", "Shape (plural)"],
       "template": "Pizza was invented by a {0} {1} chef named {2}. To make a pizza, you need to take a lump of {3}, and make a thin, round {4} {5}. Then you cover it with {6} sauce, {7} cheese, and fresh chopped {8}. Next you have to bake it in a very hot {9}. When it is done, cut it into {10} {11}. Bon appétit!"
+    },
+
+    {
+      "title": "The Silly Super-Hero",
+      "blanks": ["A Kind of Animal", "Adjective", "A Silly Action ending in -ing", "Colour", "A Number from 1 to 10"],
+      "template": "My name is Captain Awesome, and I am a super-hero!  My sidekick is a big, friendly {0} who is very {1}.  Today, our job is to stop the evil villain, Mr. Grumbles. We saw him {2} across the playground!  Quickly, my sidekick and I used our super-speed to catch him near the {3} swings.  We told Mr. Grumbles he had to count to the number {4} and then promise to be nice.  It was a very good day for super-heroes!"
     }
+
   ]
 }
