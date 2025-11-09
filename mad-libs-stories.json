@@ -28,6 +28,42 @@
       "title": "The Silly Super-Hero",
       "blanks": ["A Kind of Animal", "Adjective", "A Silly Action ending in -ing", "Colour", "A Number from 1 to 10"],
       "template": "My name is Captain Awesome, and I am a super-hero!  My sidekick is a big, friendly {0} who is very {1}.  Today, our job is to stop the evil villain, Mr. Grumbles. We saw him {2} across the playground!  Quickly, my sidekick and I used our super-speed to catch him near the {3} swings.  We told Mr. Grumbles he had to count to the number {4} and then promise to be nice.  It was a very good day for super-heroes!"
+    },
+
+    {
+        "title": "The Picnic Adventure",
+        "blanks": [
+        "A Plural Noun",
+        "Adjective",
+        "A Verb (action word)",
+        "A Place",
+        "A Sound (e.g., BOOM, Eek!)"
+        ],
+        "template": "We decided to have a picnic! We packed up our biggest basket and brought lots of {0} to share. When we got to the {1} park, we started to {2} very loudly. Suddenly, a big squirrel came running up to us from the {3}. It was making a {4}! Maybe it wanted one of our sandwiches."
+    },
+
+    {
+        "title": "Chef's Silly Sandwich",
+        "blanks": [
+        "A Kind of Food",
+        "Adjective",
+        "A Verb",
+        "A Part of the Body",
+        "A Plural Noun"
+        ],
+        "template": "My favorite chef, Aunt Millie, was making a special lunch! It was a super-duper, yummy sandwich. First, she put two slices of bread down. Next came a big pile of {0}. Then, she added a {1} sauce that made the bread {2}. When she was finished, the sandwich was taller than her {3}. She cut it up and we shared it with all our {4}."
+    },
+
+    {
+        "title": "The Friendly Alien",
+        "blanks": [
+        "A Colour",
+        "Adjective",
+        "A Verb ending in -ing",
+        "An Animal",
+        "A Number from 1 to 10"
+        ],
+        "template": "I met an alien today! He was a friendly little guy who was bright {0}. He had {4} big, {1} eyes, and he kept saying, \"Beep boop!\" He came from a planet where everyone loves {2}. I showed him my favorite pet, the little {3}. The alien laughed and waved goodbye!"
     }
 
   ]
