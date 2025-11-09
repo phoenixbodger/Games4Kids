@@ -327,6 +327,41 @@ body {
     font-size: 2em;
     width: 80px;
 }
+
+/* --- Mad Libs Game Specific Layout --- */
+.mad-libs-container {
+    max-width: 800px;
+    text-align: center;
+}
+
+#mad-libs-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.mad-libs-input-group input {
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+    width: 180px;
+}
+
+.final-story-box {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
+    line-height: 1.8;
+    font-size: 1.2em;
+}
+
 /* Clock Game Specific Styles */
 .clock-game-container .game-info { /* Styles for the round/score/timer display */
     display: flex;
