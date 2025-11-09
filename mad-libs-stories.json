@@ -1,0 +1,27 @@
+{
+  "stories": [
+    {
+      "title": "A Day at the Zoo",
+      "blanks": [
+        "Adjective",
+        "Noun",
+        "Verb (past tense)",
+        "Adverb",
+        "Adjective",
+        "Noun",
+        "Noun",
+        "Adjective",
+        "Verb",
+        "Adverb",
+        "Verb (ending in -ing)",
+        "Noun"
+      ],
+      "template": "Today I went to the zoo. I saw a(n) {0} {1} jumping up and down in its tree. He {2} {3} through the large tunnel that led to its {4} {5}. I got some peanuts and passed them to a gigantic gray {6} towering above my head. Feeding that animal made me hungry. I went to get a {7} scoop of ice cream. It filled my stomach. Afterwards I had to {8} {9} to catch our bus. I can't wait to go to the zoo again. Next time I want to see a {10} {11}."
+    },
+    {
+      "title": "Pizza Recipe",
+      "blanks": ["Adjective", "Nationality", "Person", "Noun", "Adjective", "Noun", "Adjective", "Adjective", "Plural Noun", "Noun", "Number", "Shape (plural)"],
+      "template": "Pizza was invented by a {0} {1} chef named {2}. To make a pizza, you need to take a lump of {3}, and make a thin, round {4} {5}. Then you cover it with {6} sauce, {7} cheese, and fresh chopped {8}. Next you have to bake it in a very hot {9}. When it is done, cut it into {10} {11}. Bon appétit!"
+    }
+  ]
+}

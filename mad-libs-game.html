@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mad Libs Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <h1 class="game-title-banner">Mad Libs Fun!</h1>
+
+    <div class="main-game-container mad-libs-container">
+
+        <!-- Story Selection Screen -->
+        <div id="mad-libs-selection-screen">
+            <h2>Choose a Story</h2>
+            <div class="setting-group">
+                <label for="story-select">Story:</label>
+                <select id="story-select">
+                    <option value="">Loading stories...</option>
+                </select>
+            </div>
+            <button id="start-mad-libs-btn" class="game-button" disabled>Start</button>
+        </div>
+
+        <!-- Word Input Screen -->
+        <div id="mad-libs-input-screen" class="hidden">
+            <h2 id="input-screen-title">Fill in the blanks!</h2>
+            <form id="mad-libs-form">
+                <!-- Input fields will be generated here by JS -->
+            </form>
+            <button id="create-story-btn" class="game-button">Create Story</button>
+        </div>
+
+        <!-- Final Story Screen -->
+        <div id="mad-libs-story-screen" class="hidden">
+            <h2 id="story-title"></h2>
+            <div id="final-story" class="final-story-box">
+                <!-- Completed story will be shown here -->
+            </div>
+            <button id="play-again-btn" class="game-button">Play Another</button>
+        </div>
+
+        <button id="main-btn" class="game-button">
+            <i class="fas fa-house"></i> Back to Main Menu
+        </button>
+
+    </div>
+
+    <script src="script.js"></script>
+    <script src="mad-libs-game.js"></script>
+</body>
+</html>
